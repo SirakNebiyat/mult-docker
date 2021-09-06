@@ -79,32 +79,32 @@ jobs:
         name: Build and push client
         uses: docker/build-push-action@v2
         with:
-          context: .
-          dockerfile: ./client
+          context: client
+          dockerfile: client/Dockerfile
           push: true
           tags: nebbigit/multi-client:latest
       - 
         name: Build and push api
         uses: docker/build-push-action@v2
         with:
-          context: .
-          dockerfile: ./server
+          context: server
+          dockerfile: server/Dockerfile
           push: true
           tags: nebbigit/multi-server:latest
       - 
         name: Build and push nginx
         uses: docker/build-push-action@v2
         with:
-          context: .
-          dockerfile: ./nginx
+          context: nginx
+          dockerfile: nginx/Dockerfile
           push: true
           tags: nebbigit/multi-nginx:latest
       - 
         name: Build and push worker
         uses: docker/build-push-action@v2
         with:
-          context: .
-          dockerfile: ./worker
+          context: worker
+          dockerfile: worker/Dockerfile
           push: true
           tags: nebbigit/multi-worker:latest        
             
