@@ -40,6 +40,7 @@ jobs:
       # build and test the apps     
       - name: build
         run: |
+          cd ./client
           npm run build
           npm run test
  
