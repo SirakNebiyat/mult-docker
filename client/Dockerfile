@@ -3,7 +3,7 @@ WORKDIR "/app"
 COPY ./package.json ./
 RUN npm install
 COPY . .
-run npm build
+RUN npm build
 
 
 FROM nginx AS runtime
