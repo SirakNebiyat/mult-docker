@@ -31,7 +31,6 @@ jobs:
         with:
           working-directory: ./client
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       
       - name: Cache dependencies
         uses: actions/cache@v2
