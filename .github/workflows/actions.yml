@@ -32,13 +32,23 @@ jobs:
           working-directory: ./client
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
-      # install applicaion dependencies
+      
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+          
       - name: Install dependencies
         working-directory: ./client
-        run: |
-          npm install
-          npm ci 
+        run: npm ci --ignore-scripts
+      # install applicaion dependencies
+      #- name: Install dependencies
+       # working-directory: ./client
+        #run: |
+         # npm install
+          #npm ci 
       # build and test the apps     
       - name: build
         working-directory: ./client
