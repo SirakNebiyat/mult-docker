@@ -84,6 +84,16 @@ jobs:
           context: client
           push: true
           tags: nebbigit/multi-client:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      -
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       - 
         name: Build and push api
         uses: docker/build-push-action@v2
@@ -91,6 +101,8 @@ jobs:
           context: server
           push: true
           tags: nebbigit/multi-server:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       - 
         name: Build and push nginx
         uses: docker/build-push-action@v2
@@ -98,11 +110,20 @@ jobs:
           context: nginx
           push: true
           tags: nebbigit/multi-nginx:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       - 
         name: Build and push worker
         uses: docker/build-push-action@v2
         with:
           context: worker
           push: true
-          tags: nebbigit/multi-worker:latest        
+          tags: nebbigit/multi-worker:latest   
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      -
+        name: Move cache again
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
             
