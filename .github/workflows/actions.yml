@@ -22,7 +22,7 @@ jobs:
    steps:
      - uses: actions/checkout@v2
      - name: Build Docker image 
-       run: docker build -t nebbigit/react-test -f ./client/Dockerfile.dev .
+       run: docker build -t nebbigit/react-test -f ./client/Dockerfile.dev ./client
      - name: Run tests inside the container
        run: docker run nebbigit/react-test npm test -- --coverage
  
