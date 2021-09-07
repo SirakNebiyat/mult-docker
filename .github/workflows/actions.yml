@@ -11,9 +11,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   
-
-
-#elasticbeanstalk-eu-north-1-807789500198
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build_test:
@@ -106,39 +103,39 @@ jobs:
           push: true
           tags: nebbigit/multi-worker:latest   
     
-    deploy_to_elastic_beanstalk:
-      runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/master'
-      needs: [build_test]
+  deploy_to_elastic_beanstalk:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    needs: [build_test]
 
-      steps: 
+    steps: 
 
-        - name: Checkout Latest Repo
-          uses: actions/checkout@v2
-          
-        - name: Generate Deployment Package 
-          run: zip -r deploy.zip * -x "**node_modules**"
-        - name: 'AWS: Timestamp action'
-          uses: gerred/actions/current-time@master
-          id: current-time
-        
-        - name: 'AWS: String replace action'
-          uses: frabert/replace-string-action@master
-          id: format-time
-          with:
-            pattern: '[:\.]+'
-            string: "${{ steps.current-time.outputs.time }}"
-            replace-with: '-'
-            flags: 'g'
+      - name: Checkout Latest Repo
+        uses: actions/checkout@v2
 
-        - name: Beanstalk Deploy my app
-          uses: einaregilsson/beanstalk-deploy@v4
-          with:
-            aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
-            aws_secret_key: ${{secrets.AWS_SECRET_KEY}}
-            application_name: multi-docker
-            environment_name: Multidocker-env
-            region: eu-north-1
-            version_label: "multi-docker-app-v${{ steps.format-time.outputs.replaced }}"
-            deployment_package: deploy.zip
+      - name: Generate Deployment Package 
+        run: zip -r deploy.zip * -x "**node_modules**"
+      - name: 'AWS: Timestamp action'
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: 'AWS: String replace action'
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: '-'
+          flags: 'g'
+
+      - name: Beanstalk Deploy my app
+        uses: einaregilsson/beanstalk-deploy@v4
+        with:
+          aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
+          aws_secret_key: ${{secrets.AWS_SECRET_KEY}}
+          application_name: multi-docker
+          environment_name: Multidocker-env
+          region: eu-north-1
+          version_label: "multi-docker-app-v${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
   
