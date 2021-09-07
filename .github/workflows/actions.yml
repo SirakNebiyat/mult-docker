@@ -106,7 +106,7 @@ jobs:
   deploy_to_elastic_beanstalk:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-    needs: [build_test]
+    needs: [build_deploy_to_docker]
 
     steps: 
 
